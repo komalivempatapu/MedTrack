@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Book Appointment</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 30px;
+    }
+    form input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+    button {
+      padding: 10px 15px;
+      background: green;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Book Appointment with Dr. {{ doctor.name }}</h2>
+  <form method="POST">
+    <input type="text" name="symptoms" placeholder="Symptoms" required />
+    <textarea name="description" rows="5" placeholder="Description"></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
+

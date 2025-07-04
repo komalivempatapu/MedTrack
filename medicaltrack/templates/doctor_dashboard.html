@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7fb;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: #1d3557;
+      color: white;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar h2 {
+      font-size: 22px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 12px 0;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
+
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 14px 12px;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      background-color: #f4f6fb;
+      font-weight: bold;
+      color: #333;
+    }
+
+    tr:hover {
+      background: #f9fbff;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .pending {
+      background: #fcd34d;
+      color: #7c4c00;
+    }
+
+    .replied {
+      background: #86efac;
+      color: #065f46;
+    }
+
+    textarea {
+      width: 100%;
+      height: 60px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 6px;
+      padding: 8px 14px;
+      background-color: #1d3557;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #163050;
+    }
+
+    .prescription-box {
+      background: #e9fbee;
+      padding: 10px;
+      border-left: 4px solid #27ae60;
+      border-radius: 6px;
+      font-style: italic;
+    }
+
+    .profile {
+      font-size: 16px;
+      text-align: right;
+      color: #555;
+    }
+
+    .profile span {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div>
+        <h2>Doctor Panel</h2>
+        <a href="/doctor_dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+      </div>
+      <div>
+        <p>Welcome,<br><strong>Dr. {{ session['name'] }}</strong></p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <div class="header">
+        <h1>Appointments</h1>
+        <div class="profile">
+          Logged in as <span>Dr. {{ session['name'] }}</span>
+        </div>
+      </div>
+
+      {% if appointments %}
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Symptoms</th>
+              <th>Description</th>
+              <th>Booked On</th>
+              <th>Status</th>
+              <th>Response</th>
+              <th>Responded Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in appointments %}
+            <tr>
+              <td>{{ a.patient_name }}</td>
+              <td>{{ a.symptoms }}</td>
+              <td>{{ a.description }}</td>
+              <td>{{ a.booking_time }}</td>
+              <td>
+                <span class="badge {% if a.status == 'Replied' %}replied{% else %}pending{% endif %}">
+                  {{ a.status }}
+                </span>
+              </td>
+              <td>
+                {% if a.status == 'Pending' %}
+                <form method="POST" action="/respond/{{ a.id }}">
+                  <textarea name="prescription" placeholder="Write your prescription here..." required></textarea>
+                  <button type="submit">Submit</button>
+                </form>
+                {% else %}
+                <div class="prescription-box">{{ a.prescription }}</div>
+                {% endif %}
+              </td>
+              <td>
+                {% if a.responded_time %}
+                  {{ a.responded_time }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+        <p>No appointments found.</p>
+      {% endif %}
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .signup-box {
+      background: white;
+      padding: 30px;
+      width: 450px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .btn {
+      background: #28a745;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-box">
+    <h2>Sign Up</h2>
+    <form action="/signup" method="POST">
+      <select name="role" id="roleSelect" required>
+        <option value="" disabled selected>Select Role</option>
+        <option value="patient">Patient</option>
+        <option value="doctor">Doctor</option>
+      </select>
+
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
+
+      <input type="number" name="age" id="age" class="patient-field" placeholder="Age" />
+      <input type="text" name="gender" id="gender" class="patient-field" placeholder="Gender" />
+
+      <input type="text" name="specialization" id="specialization" class="doctor-field hidden" placeholder="Specialization" />
+
+      <button type="submit" class="btn">Register</button>
+    </form>
+
+    <div class="login-link">
+      Already have an account? <a href="{{ url_for('login') }}">Login</a>
+    </div>
+  </div>
+
+  <script>
+    const roleSelect = document.getElementById('roleSelect');
+    const patientFields = document.querySelectorAll('.patient-field');
+    const doctorField = document.getElementById('specialization');
+
+    roleSelect.addEventListener('change', () => {
+      if (roleSelect.value === 'doctor') {
+        patientFields.forEach(field => field.classList.add('hidden'));
+        doctorField.classList.remove('hidden');
+      } else {
+        patientFields.forEach(field => field.classList.remove('hidden'));
+        doctorField.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

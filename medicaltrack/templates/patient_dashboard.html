@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #1d3557;
+      color: white;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar h2 {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 10px 0;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
+
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 24px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 220px;
+    }
+
+    .search-bar button {
+      padding: 10px 14px;
+      border: none;
+      background: #1d3557;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .doctor-grid {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .doctor-card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: 0.3s ease;
+      text-align: center;
+    }
+
+    .doctor-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+
+    .name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .specialization {
+      color: #1d3557;
+      font-weight: 500;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .email {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+
+    .rating {
+      background: #f5a623;
+      color: white;
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #1d3557;
+      color: white;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color:#1d3557;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div>
+        <h2>Health Care</h2>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/my_appointments">My Appointments</a>
+        <a href="/logout">Logout</a>
+      </div>
+      <div>
+        <h4>Welcome, {{ session['name'] }}</h4>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <div class="header">
+        <h1>Find a Doctor</h1>
+        <form class="search-bar" method="GET" action="{{ url_for('patient_dashboard') }}">
+          <input type="text" name="specialization" placeholder="Search by specialization" value="{{ search_query }}">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+
+      <div class="doctor-grid">
+        {% for doc in doctors %}
+          <div class="doctor-card">
+            <div class="name">{{ doc.name }}</div>
+            <div class="specialization">{{ doc.specialization }}</div>
+            <div class="email">{{ doc.email }}</div>
+            <div class="rating">⭐ {{ doc.rating or '4.5' }}</div>
+            <form action="/book/{{ doc.email }}" method="GET">
+              <button class="btn">Book Appointment</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f7fb;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(to bottom right, #1d3557, #81d4fa);
+      color: white;
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .left-panel h1 {
+      font-size: 30px;
+      margin-bottom: 30px;
+    }
+
+    .left-panel ul {
+      list-style: none;
+      font-size: 18px;
+      line-height: 2;
+      padding: 0;
+    }
+
+    .right-panel {
+      flex: 1;
+      background: white;
+      padding: 80px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .role-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+
+    .role-btn {
+      border: none;
+      background: none;
+      font-size: 16px;
+      cursor: pointer;
+      padding-bottom: 5px;
+      border-bottom: 2px solid transparent;
+    }
+
+    .role-btn.active {
+      font-weight: bold;
+      border-color: #134155;
+      color: #24556a;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      max-width: 350px;
+      margin: auto;
+    }
+
+    form input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color:#1d3557;
+      color: white;
+      border: none;python 
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .signup-link {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .signup-link a {
+      color: #1a5771;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <h1>Welcome to MedTrack !</h1>
+      <ul>
+        <li>✔️ Expert advice from top doctors</li>
+        <li>✔️ Available 24/7 on any device</li>
+        <li>✔️ Private questions answered within 24 hrs</li>
+      </ul>
+    </div>
+
+    <div class="right-panel">
+      <div class="role-toggle">
+        <button class="role-btn active" data-role="patient">👤 Patient</button>
+        <button class="role-btn" data-role="doctor">🩺 Doctor</button>
+      </div>
+
+      <h2>Welcome back</h2>
+
+      <form action="/login" method="POST">
+        <input type="hidden" name="role" id="roleInput" value="patient">
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" class="btn">Sign in</button>
+      </form>
+
+      <div class="signup-link">
+        Don’t have an account? <a href="{{ url_for('signup') }}">Sign up</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const roleButtons = document.querySelectorAll('.role-btn');
+    const roleInput = document.getElementById('roleInput');
+
+    roleButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        roleButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        roleInput.value = btn.dataset.role;
+      });
+    });
+  </script>
+</body>
+</html>
